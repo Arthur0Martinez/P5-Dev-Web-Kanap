@@ -18,6 +18,7 @@ fetch(`http://localhost:3000/api/products/${idProduct}`  )
 const productTitle = document.getElementById("title");
 
 function productData(data) {
+    productToCart(data);
     document.querySelector("title").innerText = data.name;
     document.getElementById("title").innerText = data.name;
     document.getElementById("description").innerText = data.description;
@@ -33,7 +34,6 @@ function productData(data) {
         productColors.innerHTML = colors;
         productColors.value = colors;
     }
-    productToCart(data);
 }
 
 function productToCart(data) {
@@ -41,15 +41,22 @@ function productToCart(data) {
     let btnProductToCart = document.getElementById("addToCart");
     let numberOfProduct = document.getElementById("quantity");
     
-    btnProductToCart.addEventListener ("click", function () {
-        
-        if (colors.value != "" && numberOfProduct.value > 0){
-            let cartElements = [data._id, colors.value, numberOfProduct.value];
-            console.log(cartElements);
+    btnProductToCart.addEventListener ("click", function () {   
+        let numberOfProductValue = numberOfProduct.value
+        if (colors.value != "" && numberOfProductValue > 0){
+            let cartElements = {
+               idProduct : idProduct, 
+               colorsChoice : colors.value, 
+               productNumber : numberOfProductValue,
+               productImg : data.imageUrl,
+               productImgAlt : data.altTxt,
+               productName : data.name,
+               productPrice : data.price,
+            };
             console.log("Le bouton fonctionne");
             window.alert("L'article à été ajouté au panier");
             let basket = new Basket()
-            basket.add(cartElements)
+            basket.add(cartElements);
         }
         else{
             window.alert("Veuiller selectionner une couleur et une quantité");
@@ -60,7 +67,7 @@ function productToCart(data) {
 class Basket{
     constructor(){
         let basket = localStorage.getItem("Basket");
-        if(basket == null){
+        if(basket === null){
             this.basket = [];
         }else{
             this.basket = JSON.parse(basket);
@@ -70,49 +77,19 @@ class Basket{
         localStorage.setItem("Basket", JSON.stringify(this.basket));
     }
     add(product){
-        let foundProduct = this.basket.find(p => p.id == product.id);
-        if(foundProduct != undefined){
-            foundProduct.quantity++;
+        let foundProduct = this.basket.find((el) => el.idProduct === idProduct && el.colorsChoice === colors.value);
+        if(foundProduct){
+            let newQuantity = parseInt(cartElements.numberOfProductValue) + parseInt(foundProduct.numberOfProductValue);
+            console.log("Le produit est déjà dans le local storage")
+            foundProduct.productNumber = newQuantity;
+            this.save();
         }else{
-            product.quantity = 1;
             this.basket.push(product);
+            this.save();
+            console.log("Pas le produit dans le local storage")
         }
         this.save();
     }
-    remove(product){
-        let basket = getBasket();
-        this.basket = this.basket.filter(p => p.id != product.id);
-        saveBasket();
-    }
-    changeQuantity(product, quantity){
-        let foundProduct = this.basket.find(p => p.id == product.id);
-        if (foundProduct != undefined) {
-            foundProduct.quantity += quantity;
-            if(foundProduct.quantity <= 0) {
-                this.remove(foundProduct)
-            }else {
-                this.save();
-            }
-        }
-    }
-    getNumberProduct() {
-        let number = 0;
-        for(let product of this.basket) {
-            number += product.quantity
-        }
-        return number;
-    }
-    getTotalPrice() {
-        let number = 0;
-        for(let product of this.basket) {
-            number += product.quantity * product.price;
-        }
-        return number;
-    }
+
 }
 
-
-//function addBasket(data){
-  //  let addCartElements = getBasket();
-    //addCartElements.push(data);
-//}
