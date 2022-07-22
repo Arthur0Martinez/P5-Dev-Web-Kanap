@@ -1,30 +1,31 @@
-let str = window.location.href;
-let url = new URL(str);
-let idProduct = url.searchParams.get("id");
+//Récupération de l'id produit compris dans l'URL de la page
+let newUrl = new URL(window.location.href);
+let idProduct = newUrl.searchParams.get("id");
 console.log(idProduct);
 
+//Appel de l'API et récupération des données en fonction de l'id produit
 fetch(`http://localhost:3000/api/products/${idProduct}`  )
     .then(function (response) {
         return response.json()
     })
     .then(function (data) {
         console.log(data);
-        productData(data)
+        implementProductData(data)
+        productToCart(data)
     })
     .catch(function (error) {
         console.log('Pas de liaison effectué', error)
     })
 
-const productTitle = document.getElementById("title");
+//Données du produit implémenter dans le DOM
+function implementProductData(data) {
 
-function productData(data) {
-    document.querySelector("title").innerText = data.name;
-    document.getElementById("title").innerText = data.name;
-    document.getElementById("description").innerText = data.description;
+    document.getElementById("title").innerText = data.name;    
     document.getElementById("price").innerText = data.price;
+    document.getElementById("description").innerText = data.description;
     document.getElementsByClassName("item__img")[0].innerHTML = `<img src="${data.imageUrl}" alt="${data.altTxt}">`
-    // Réussir à faire les couleurs
-    // document.getElementById("colors").innerText = data.colors;
+    
+    //Séléctions différentes couleurs du produit
     for (let colors of data.colors){
         console.log(colors);
         let productColors = document.createElement("option");
@@ -33,23 +34,30 @@ function productData(data) {
         productColors.innerHTML = colors;
         productColors.value = colors;
     }
-    productToCart(data);
 }
 
+
+//Ajout des données produits nécéssaires pour le panier
 function productToCart(data) {
     
     let btnProductToCart = document.getElementById("addToCart");
     let numberOfProduct = document.getElementById("quantity");
     
-    btnProductToCart.addEventListener ("click", function () {
-        
+    //Implemente les données et permets de vérifier la séléction d'une couleur/quantité
+    btnProductToCart.addEventListener ("click", function () {   
         if (colors.value != "" && numberOfProduct.value > 0){
-            let cartElements = [data._id, colors.value, numberOfProduct.value];
-            console.log(cartElements);
-            console.log("Le bouton fonctionne");
+            let cartElements = {
+               idProduct : idProduct, 
+               colorsChoice : colors.value, 
+               productNumber : numberOfProduct.value,
+               productImg : data.imageUrl,
+               productImgAlt : data.altTxt,
+               productName : data.name,
+               productPrice : data.price,
+            };
             window.alert("L'article à été ajouté au panier");
             let basket = new Basket()
-            basket.add(cartElements)
+            basket.add(cartElements);
         }
         else{
             window.alert("Veuiller selectionner une couleur et une quantité");
@@ -60,7 +68,7 @@ function productToCart(data) {
 class Basket{
     constructor(){
         let basket = localStorage.getItem("Basket");
-        if(basket == null){
+        if(basket === null){
             this.basket = [];
         }else{
             this.basket = JSON.parse(basket);
@@ -70,49 +78,35 @@ class Basket{
         localStorage.setItem("Basket", JSON.stringify(this.basket));
     }
     add(product){
-        let foundProduct = this.basket.find(p => p.id == product.id);
-        if(foundProduct != undefined){
-            foundProduct.quantity++;
+        let foundProduct = this.basket.find((el) => el.idProduct === idProduct && el.colorsChoice === colors.value);
+        if(foundProduct){
+            let newQuantity = parseInt(cartElements.numberOfProductValue) + parseInt(foundProduct.numberOfProductValue);
+            console.log("Le produit est déjà dans le local storage")
+            foundProduct.productNumber = newQuantity;
+            this.save();
         }else{
-            product.quantity = 1;
             this.basket.push(product);
+            this.save();
+            console.log("Pas le produit dans le local storage")
         }
         this.save();
     }
-    remove(product){
-        let basket = getBasket();
-        this.basket = this.basket.filter(p => p.id != product.id);
-        saveBasket();
-    }
-    changeQuantity(product, quantity){
-        let foundProduct = this.basket.find(p => p.id == product.id);
-        if (foundProduct != undefined) {
-            foundProduct.quantity += quantity;
-            if(foundProduct.quantity <= 0) {
-                this.remove(foundProduct)
-            }else {
-                this.save();
-            }
+remove(product){
+    let basket = getBasket();
+    this.basket = this.basket.filter(p => p.id != product.id);
+    saveBasket();
+}
+changeQuantity(product, quantity){
+    let foundProduct = this.basket.find(p => p.id == product.id);
+    if (foundProduct != undefined) {
+        foundProduct.quantity += quantity;
+        if(foundProduct.quantity <= 0) {
+            this.remove(foundProduct)
+        }else {
+            this.save();
         }
-    }
-    getNumberProduct() {
-        let number = 0;
-        for(let product of this.basket) {
-            number += product.quantity
-        }
-        return number;
-    }
-    getTotalPrice() {
-        let number = 0;
-        for(let product of this.basket) {
-            number += product.quantity * product.price;
-        }
-        return number;
     }
 }
 
+}
 
-//function addBasket(data){
-  //  let addCartElements = getBasket();
-    //addCartElements.push(data);
-//}

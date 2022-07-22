@@ -1,19 +1,21 @@
-//Appel de l'API et récupération des données
+//Appel de l'API et récupération des données, erreur en cas d'echec de la requete
 fetch('http://localhost:3000/api/products')
     .then(function (response) {
         return response.json()
     })
     .then(function (data) {
-        sofa (data)
+        sofa(data)
     })
     .catch(function (error) {
         console.log('Pas de liaison effectué', error)
     })
 
-//Boucle permettant de récupérer puis de modifier les données dans le HTML
-const allSofa = document.getElementById("items")
-const sofa = function (data) {
-  console.log(data);
+
+//Récupération et implémentation des données de l'API dans le DOM
+function sofa(data) {
+  console.log(sofa);
+
+  // Boucle qui permet d'implémenter tout les données produits de l'API
   for (let i = 0; i < data.length; i++) {
     const html = `
     <section id="items">
@@ -25,7 +27,8 @@ const sofa = function (data) {
         </article>
       </a> 
     </section>`;
+    const allSofa = document.getElementById("items")
     allSofa.insertAdjacentHTML("beforeend", html)
   }
-  
 }
+
