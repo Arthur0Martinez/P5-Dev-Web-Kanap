@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 //Vérifier que les données ont bien été récupérées
 let getLocalStorage = JSON.parse(localStorage.getItem("Basket"));
 console.table(getLocalStorage);
@@ -7,6 +8,12 @@ const positionEmptyCart = document.querySelector("#cart__items");
 const emptyCart = `<p>Aucun article dans le panier</p>`;
 
 //Variables pour récupérer les éléments du formulaire dans le DOM
+=======
+let getLocalStorage = JSON.parse(localStorage.getItem("Basket"));
+console.table(getLocalStorage);
+const positionEmptyCart = document.querySelector("#cart__items");
+//Récupérer les éléments du formulaire
+>>>>>>> 21e9d7f9c8519aa5a825ffc57e39ce88f896d4d1
 const firstName = document.getElementById("firstName");
 const lastName = document.getElementById("lastName");
 const adress = document.getElementById("address");
@@ -14,6 +21,7 @@ const city = document.getElementById("city");
 const email = document.getElementById("email");
 const submitBtn = document.getElementById("order");
 
+<<<<<<< HEAD
 //Vérifier si le panier à un article et en afficher les éléments 
 //Affiche les éléments du panier sur la page
 function getCart(){
@@ -48,6 +56,37 @@ function getCart(){
                     </div>
                 </article> `;
                 positionEmptyCart.insertAdjacentHTML("beforeend", html)
+=======
+function getCart(){
+    if (getLocalStorage === null || getLocalStorage == 0) {
+        const emptyCart = `<p>Aucun article dans le panier</p>`;
+        positionEmptyCart.innerHTML = emptyCart;
+    } else {
+        for (let Basket in getLocalStorage) {
+                const html = `
+                    <article class="cart__item" data-id="${getLocalStorage[Basket].idProduit}" data-color="${getLocalStorage[Basket].colorsChoice}">
+                        <div class="cart__item__img">
+                            <img src="${getLocalStorage[Basket].productImg}" alt="${getLocalStorage[Basket].productImgAlt}">
+                        </div>
+                        <div class="cart__item__content">
+                            <div class="cart__item__content__description">
+                                <h2>${getLocalStorage[Basket].productName}</h2>
+                                <p>${getLocalStorage[Basket].colorsChoice}</p>
+                                <p>${getLocalStorage[Basket].productPrice} €</p>
+                            </div>
+                            <div class="cart__item__content__settings">
+                                <div class="cart__item__content__settings__quantity">
+                                    <p>Qté : </p>
+                                    <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${getLocalStorage[Basket].productNumber}">
+                                </div>
+                                <div class="cart__item__content__settings__delete">
+                                    <p class="deleteItem">Supprimer</p>
+                                </div>
+                            </div>
+                        </div>
+                    </article> `;
+                    positionEmptyCart.insertAdjacentHTML("beforeend", html)
+>>>>>>> 21e9d7f9c8519aa5a825ffc57e39ce88f896d4d1
         }
     }
     deleteItem()
