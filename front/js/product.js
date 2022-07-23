@@ -20,15 +20,7 @@ fetch(`http://localhost:3000/api/products/${idProduct}`  )
 //Données du produit implémenter dans le DOM
 function implementProductData(data) {
 
-<<<<<<< HEAD
     document.getElementById("title").innerText = data.name;    
-=======
-function productData(data) {
-    productToCart(data);
-    document.querySelector("title").innerText = data.name;
-    document.getElementById("title").innerText = data.name;
-    document.getElementById("description").innerText = data.description;
->>>>>>> 21e9d7f9c8519aa5a825ffc57e39ce88f896d4d1
     document.getElementById("price").innerText = data.price;
     document.getElementById("description").innerText = data.description;
     document.getElementsByClassName("item__img")[0].innerHTML = `<img src="${data.imageUrl}" alt="${data.altTxt}">`
@@ -51,7 +43,6 @@ function productToCart(data) {
     let btnProductToCart = document.getElementById("addToCart");
     let numberOfProduct = document.getElementById("quantity");
     
-<<<<<<< HEAD
     //Implemente les données et permets de vérifier la séléction d'une couleur/quantité
     btnProductToCart.addEventListener ("click", function () {   
         if (colors.value != "" && numberOfProduct.value > 0){
@@ -59,24 +50,11 @@ function productToCart(data) {
                idProduct : idProduct, 
                colorsChoice : colors.value, 
                productNumber : numberOfProduct.value,
-=======
-    btnProductToCart.addEventListener ("click", function () {   
-        let numberOfProductValue = numberOfProduct.value
-        if (colors.value != "" && numberOfProductValue > 0){
-            let cartElements = {
-               idProduct : idProduct, 
-               colorsChoice : colors.value, 
-               productNumber : numberOfProductValue,
->>>>>>> 21e9d7f9c8519aa5a825ffc57e39ce88f896d4d1
                productImg : data.imageUrl,
                productImgAlt : data.altTxt,
                productName : data.name,
                productPrice : data.price,
             };
-<<<<<<< HEAD
-=======
-            console.log("Le bouton fonctionne");
->>>>>>> 21e9d7f9c8519aa5a825ffc57e39ce88f896d4d1
             window.alert("L'article à été ajouté au panier");
             let basket = new Basket()
             basket.add(cartElements);
@@ -87,6 +65,11 @@ function productToCart(data) {
     })
 }
 
+
+
+
+
+////////////////////////////////////////////////////
 class Basket{
     constructor(){
         let basket = localStorage.getItem("Basket");
@@ -113,7 +96,6 @@ class Basket{
         }
         this.save();
     }
-<<<<<<< HEAD
 remove(product){
     let basket = getBasket();
     this.basket = this.basket.filter(p => p.id != product.id);
@@ -133,8 +115,3 @@ changeQuantity(product, quantity){
 
 }
 
-=======
-
-}
-
->>>>>>> 21e9d7f9c8519aa5a825ffc57e39ce88f896d4d1
