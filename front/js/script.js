@@ -1,20 +1,18 @@
+//*********TOUT LES COMMENTAIRES DECRIVENT LE CODE EN DESSOUS D'EUX*********//
 //Appel de l'API et récupération des données, erreur en cas d'echec de la requete
 fetch('http://localhost:3000/api/products')
     .then(function (response) {
-        return response.json()
+        return response.json();
     })
     .then(function (data) {
-        sofa(data)
+        sofa(data);
     })
     .catch(function (error) {
-        console.log('Pas de liaison effectué', error)
+        console.log('Pas de liaison effectué', error);
     })
-
-
 //Récupération et implémentation des données de l'API dans le DOM
 function sofa(data) {
   console.log(sofa);
-
   // Boucle qui permet d'implémenter tout les données produits de l'API
   for (let i = 0; i < data.length; i++) {
     const html = `
@@ -27,8 +25,7 @@ function sofa(data) {
         </article>
       </a> 
     </section>`;
-    const allSofa = document.getElementById("items")
-    allSofa.insertAdjacentHTML("beforeend", html)
+    const allSofa = document.getElementById("items");
+    allSofa.insertAdjacentHTML("beforeend", html);
   }
 }
-
