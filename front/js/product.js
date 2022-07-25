@@ -35,20 +35,22 @@ function implementProductData(data) {
 //Ajout des données produits nécéssaires pour le panier
 function productToCart(data) {  
     let btnProductToCart = document.getElementById("addToCart");
-    let numberOfProduct = document.getElementById("quantity");  
+    let numberOfProduct = document.getElementById("quantity");
+    let numberOfProductValue = numberOfProduct.value  
     //Implemente les données et permets de vérifier la séléction d'une couleur/quantité
     btnProductToCart.addEventListener ("click", function () {   
         if (colors.value != "" && numberOfProduct.value > 0){
             let cartElements = {
                idProduct : idProduct, 
                colorsChoice : colors.value, 
-               productNumber : numberOfProduct.value,
+               productNumber : numberOfProductValue,
                productImg : data.imageUrl,
                productImgAlt : data.altTxt,
                productName : data.name,
                productPrice : data.price,
             };
-            window.alert(`L'article ${cartElements.productName} de couleur ${cartElements.colorsChoice} à été ajouté au panier en ${cartElements.productNumber} exemplaires`);
+            console.log(cartElements)
+            window.alert(`L'article ${cartElements.productName} de couleur ${cartElements.colorsChoice} à été ajouté au panier !`);
             let basket = new Basket();
             basket.add(cartElements);
         }
@@ -73,9 +75,12 @@ class Basket{
     }
     add(product){
         let foundProduct = this.basket.find((el) => el.idProduct === idProduct && el.colorsChoice === colors.value);
+        //Permet d'ajuster la quantité si on ajoute des quantités sur la page produit
         if(foundProduct){
-            let newQuantity = parseInt(cartElements.numberOfProductValue) + parseInt(foundProduct.numberOfProductValue);
+            let numberOfProduct = document.getElementById("quantity").value;  
+            let newQuantity = parseInt(numberOfProduct) + parseInt(foundProduct.productNumber);
             console.log("Le produit est déjà dans le local storage")
+            console.log(newQuantity)
             foundProduct.productNumber = newQuantity;
             this.save();
         }else{
