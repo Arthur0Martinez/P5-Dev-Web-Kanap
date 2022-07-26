@@ -1,4 +1,4 @@
-//*********TOUT LES COMMENTAIRES DECRIVENT LE CODE EN DESSOUS D'EUX*********//
+//*********TOUs LES COMMENTAIRES DECRIVENT LE CODE EN DESSOUS D'EUX*********//
 //Appel de l'API et récupération des données, erreur en cas d'echec de la requete
 fetch('http://localhost:3000/api/products')
     .then(function (response) {
@@ -13,7 +13,7 @@ fetch('http://localhost:3000/api/products')
 //Récupération et implémentation des données de l'API dans le DOM
 function sofa(data) {
   console.log(sofa);
-  // Boucle qui permet d'implémenter tout les données produits de l'API
+  // Boucle qui permet d'implémenter toutes les données produits de l'API
   for (let i = 0; i < data.length; i++) {
     const html = `
     <section id="items">

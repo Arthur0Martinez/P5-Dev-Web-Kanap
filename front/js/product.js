@@ -1,4 +1,4 @@
-//*********TOUT LES COMMENTAIRES DECRIVENT LE CODE EN DESSOUS D'EUX*********//
+//*********TOUS LES COMMENTAIRES DECRIVENT LE CODE EN DESSOUS D'EUX*********//
 //Récupération de l'id produit compris dans l'URL de la page
 let newUrl = new URL(window.location.href);
 let idProduct = newUrl.searchParams.get("id");
@@ -16,7 +16,7 @@ fetch(`http://localhost:3000/api/products/${idProduct}`  )
     .catch(function (error) {
         console.log('Pas de liaison effectué', error);
     })
-//Données du produit implémenter dans le DOM
+//Données du produit implémenté dans le DOM
 function implementProductData(data) {
     document.getElementById("title").innerText = data.name;    
     document.getElementById("price").innerText = data.price;
@@ -36,14 +36,13 @@ function implementProductData(data) {
 function productToCart(data) {  
     let btnProductToCart = document.getElementById("addToCart");
     let numberOfProduct = document.getElementById("quantity");
-    let numberOfProductValue = numberOfProduct.value  
-    //Implemente les données et permets de vérifier la séléction d'une couleur/quantité
+    //Implemente les données et permet de vérifier la séléction d'une couleur/quantité
     btnProductToCart.addEventListener ("click", function () {   
         if (colors.value != "" && numberOfProduct.value > 0){
             let cartElements = {
                idProduct : idProduct, 
                colorsChoice : colors.value, 
-               productNumber : numberOfProductValue,
+               productNumber : numberOfProduct.value,
                productImg : data.imageUrl,
                productImgAlt : data.altTxt,
                productName : data.name,
@@ -82,10 +81,8 @@ class Basket{
             console.log("Le produit est déjà dans le local storage")
             console.log(newQuantity)
             foundProduct.productNumber = newQuantity;
-            this.save();
         }else{
             this.basket.push(product);
-            this.save();
             console.log("Pas le produit dans le local storage");
         }
         this.save();
