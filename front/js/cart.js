@@ -2,7 +2,7 @@
 //Vérifier que les données ont bien été récupérées
 let getLocalStorage = JSON.parse(localStorage.getItem("Basket"));
 let modifyQuantityItemBtn = document.getElementsByClassName('itemQuantity');
-
+//Appel de l'API et récupération des données, erreur en cas d'echec de la requete
 fetch('http://localhost:3000/api/products')
 .then(function (response) {
     return response.json();
@@ -15,7 +15,6 @@ fetch('http://localhost:3000/api/products')
 .catch(function (error) {
     console.log('Pas de liaison effectué', error);
 })
-
 console.table(getLocalStorage);
 //Variables utilisées pour séléctioner le panier dans le DOM
 const positionEmptyCart = document.querySelector("#cart__items");
@@ -34,7 +33,8 @@ function getCart(){
     modifyQuantityItem(data);
 }
 getCart();
-
+//Implémenter les éléments récupérés de la page 'produit' dans le DOM
+//Le prix vient directement de l'API pour des raisons de sécurité
 function getItemCart(data) {
     for (let i = 0; i < data.length; i++) {
         let dataPriceAll = data[i]._id
