@@ -7,6 +7,7 @@ fetch('http://localhost:3000/api/products')
 .then(function (response) {
     return response.json();
 })
+//Pour avoir accès aux data de l'API pour executé correctement les fonctions à venir
 .then(function (data) {
     getItemCart(data);
     deleteItem();    
@@ -195,5 +196,3 @@ function deleteItem(){
     
     }
 }
-
-
